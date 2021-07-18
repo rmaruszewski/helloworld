@@ -1,0 +1,24 @@
+branch-defaults:
+  default:
+    environment: green
+    group_suffix: null
+deploy:
+  artifact: target/helloworld-1.0-SNAPSHOT.jar
+global:
+  application_name: helloworld
+  branch: null
+  default_ec2_keyname: null
+  default_platform: Corretto 8 running on 64bit Amazon Linux 2
+  default_region: eu-central-1
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: null
+  repository: null
+  sc: null
+  workspace_type: Application
+option_settings:
+- namespace: aws:elasticbeanstalk:application:environment
+  option_name: sun.net.inetaddr.ttl
+  value: 10
