@@ -1,0 +1,27 @@
+Resources:
+  Database:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AllocatedStorage: 5
+      DBInstanceIdentifier: helloworld
+      DBInstanceClass: db.t2.micro
+      DBName: helloworld
+      VPCSecurityGroups:
+      - !GetAtt [DatabaseSecurityGroup, GroupId]
+      Engine: postgres
+      MasterUsername: postgres
+      MasterUserPassword: postgres
+    DeletionPolicy: Snapshot
+  DatabaseSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow all incoming traffic through the PostgreSQL default port
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: 0.0.0.0/0
+Outputs:
+  DatabaseEndpointAddress:
+    Description: PostgreSQL database address
+    Value: !GetAtt Database.Endpoint.Address
