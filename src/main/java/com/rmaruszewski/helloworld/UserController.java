@@ -35,6 +35,9 @@ class UserController {
         String dateOfBirthParam = json.getString("dateOfBirth");
         LocalDate dateOfBirth = LocalDate.parse(dateOfBirthParam, DATE_FORMATTER);
 
+        validateUsername(username);
+        validateDateOfBirth(dateOfBirth);
+
         Optional<User> existingUser = userRepository.findOne(Example.of(new User(username)));
         existingUser.ifPresent(user -> user.setDateOfBirth(dateOfBirth));
         User user = existingUser.orElse(new User(username, dateOfBirth));
@@ -88,5 +91,17 @@ class UserController {
             return DAYS.between(today, nextYearBirthday);
         }
 
+    }
+
+    private static void validateUsername(String username) {
+        if (!username.matches("[a-zA-Z]+")) {
+            throw new IllegalArgumentException("Username must contain only letters");
+        }
+    }
+
+    private static void validateDateOfBirth(LocalDate dateOfBirth) {
+        if (!dateOfBirth.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Date of birth must be a date before the current date");
+        }
     }
 }
