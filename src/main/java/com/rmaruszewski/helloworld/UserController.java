@@ -16,17 +16,17 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import static java.time.temporal.ChronoUnit.DAYS;
-
 @RestController
 class UserController {
     private static String FUTURE_BIRTHDAY_MESSAGE = "Hello, {0}! Your birthday is in {1} day(s)";
     private static String TODAY_BIRTHDAY_MESSAGE = "Hello, {0}! Happy birthday!";
     private static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final UserRepository userRepository;
+    private final BirthdayDaysCalculator birthdayDaysCalculator;
 
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, BirthdayDaysCalculator birthdayDaysCalculator) {
         this.userRepository = userRepository;
+        this.birthdayDaysCalculator = birthdayDaysCalculator;
     }
 
     @PutMapping("/hello/{username}")
@@ -64,33 +64,11 @@ class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body("Hello, world!");
     }
 
-    private static String getBirthdayMessage(User user) {
-        return isBirthdayToday(user.getDateOfBirth())
+    private String getBirthdayMessage(User user) {
+        return birthdayDaysCalculator.isBirthdayToday(user.getDateOfBirth())
             ? MessageFormat.format(TODAY_BIRTHDAY_MESSAGE, user.getUsername())
-            : MessageFormat.format(FUTURE_BIRTHDAY_MESSAGE, user.getUsername(), calculateDaysToBirthday(user.getDateOfBirth()));
-    }
-
-    private static boolean isBirthdayToday(LocalDate dateOfBirth) {
-        LocalDate today = LocalDate.now();
-
-        return today.getMonth() == dateOfBirth.getMonth()
-                && today.getDayOfMonth() == dateOfBirth.getDayOfMonth();
-    }
-
-    private static long calculateDaysToBirthday(LocalDate dateOfBirth) {
-        LocalDate today = LocalDate.now();
-
-        LocalDate currentYearBirthday = today
-                .withMonth(dateOfBirth.getMonthValue())
-                .withDayOfMonth(dateOfBirth.getDayOfMonth());
-
-        if (currentYearBirthday.isAfter(today)) {
-            return DAYS.between(today, currentYearBirthday);
-        } else {
-            LocalDate nextYearBirthday = currentYearBirthday.plusYears(1);
-            return DAYS.between(today, nextYearBirthday);
-        }
-
+            : MessageFormat.format(FUTURE_BIRTHDAY_MESSAGE, user.getUsername(),
+                birthdayDaysCalculator.calculateDaysToBirthday(user.getDateOfBirth()));
     }
 
     private static void validateUsername(String username) {
