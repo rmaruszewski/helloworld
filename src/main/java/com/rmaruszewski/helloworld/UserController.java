@@ -1,6 +1,7 @@
 package com.rmaruszewski.helloworld;
 
 import org.json.JSONObject;
+import org.springframework.data.domain.Example;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @RestController
 class UserController {
@@ -35,7 +37,9 @@ class UserController {
         String dateOfBirthParam = json.getString("dateOfBirth");
         LocalDate dateOfBirth = LocalDate.parse(dateOfBirthParam, DATE_FORMATTER);
 
-        User user = new User(username, dateOfBirth);
+        Optional<User> existingUser = userRepository.findOne(Example.of(new User(username)));
+        existingUser.ifPresent(user -> user.setDateOfBirth(dateOfBirth));
+        User user = existingUser.orElse(new User(username, dateOfBirth));
         userRepository.save(user);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");

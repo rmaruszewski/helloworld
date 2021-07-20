@@ -14,6 +14,14 @@ class User {
     private String username;
     private LocalDate dateOfBirth;
 
+    User() {
+        this(null, null);
+    }
+
+    User(String username) {
+        this(username, null);
+    }
+
     User(String username, LocalDate dateOfBirth) {
         this.username = username;
         this.dateOfBirth = dateOfBirth;

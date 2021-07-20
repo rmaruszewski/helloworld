@@ -32,9 +32,9 @@ Execute the following command:
 
 Execute the following command to run the application locally:
 
+``mvn spring-boot:run``
 
-
-Then test if it works with these ``curl`` commands:
+Then test if it works with ``curl``:
 
 ``curl -v --header "Content-Type: application/json" --request PUT --data '{"dateOfBirth":"2021-07-20"}' http://localhost:5000/hello/myuser``
 
