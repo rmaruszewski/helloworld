@@ -11,13 +11,9 @@ class DataSourceConfig {
     @Bean
     public DataSource getDataSource() {
         DataSourceBuilder<?> dataSourceBuilder = DataSourceBuilder.create();
-//        dataSourceBuilder.driverClassName("org.postgresql.Driver");
-//        dataSourceBuilder.url("jdbc:postgresql://127.0.0.1:5432/helloworld");
-//        dataSourceBuilder.username("rmaruszewski");
-//        dataSourceBuilder.password("rmaruszewski");
-
         dataSourceBuilder.driverClassName("org.postgresql.Driver");
-        dataSourceBuilder.url("jdbc:postgresql://helloworld.c4feyg3sqc47.us-east-2.rds.amazonaws.com/helloworld");
+        //dataSourceBuilder.url("jdbc:postgresql://helloworld.c4feyg3sqc47.us-east-2.rds.amazonaws.com/helloworld");
+        dataSourceBuilder.url("jdbc:postgresql://localhost/helloworld");
         dataSourceBuilder.username("postgres");
         dataSourceBuilder.password("postgres");
 
