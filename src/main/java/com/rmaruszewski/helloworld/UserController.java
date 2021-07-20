@@ -11,24 +11,22 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 @RestController
 class UserController {
+    private static String FUTURE_BIRTHDAY_MESSAGE = "Hello, {0}! Your birthday is in {1} day(s)";
+    private static String TODAY_BIRTHDAY_MESSAGE = "Hello, {0}! Happy birthday!";
     private static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final UserRepository userRepository;
 
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
-    }
-
-    @GetMapping("/")
-    ResponseEntity<String> healthCheck() {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Cache-Control", "no-store");
-        return ResponseEntity.ok().headers(responseHeaders).body("Hello, world!");
     }
 
     @PutMapping("/hello/{username}")
@@ -43,5 +41,52 @@ class UserController {
         userRepository.save(user);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
+    }
+
+    @GetMapping("/hello/{username}")
+    ResponseEntity<String> showHelloBirthdayMessage(@PathVariable String username) {
+        Optional<User> existingUser = userRepository.findOne(Example.of(new User(username)));
+        String birthdayMessage = getBirthdayMessage(existingUser.get());
+
+        JSONObject json = new JSONObject();
+        json.put("message", birthdayMessage);
+
+        return ResponseEntity.ok().body(birthdayMessage);
+    }
+
+    @GetMapping("/")
+    ResponseEntity<String> performHealthCheck() {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Cache-Control", "no-store");
+        return ResponseEntity.ok().headers(responseHeaders).body("Hello, world!");
+    }
+
+    private static String getBirthdayMessage(User user) {
+        return isBirthdayToday(user.getDateOfBirth())
+            ? MessageFormat.format(TODAY_BIRTHDAY_MESSAGE, user.getUsername())
+            : MessageFormat.format(FUTURE_BIRTHDAY_MESSAGE, user.getUsername(), calculateDaysToBirthday(user.getDateOfBirth()));
+    }
+
+    private static boolean isBirthdayToday(LocalDate dateOfBirth) {
+        LocalDate today = LocalDate.now();
+
+        return today.getMonth() == dateOfBirth.getMonth()
+                && today.getDayOfMonth() == dateOfBirth.getDayOfMonth();
+    }
+
+    private static long calculateDaysToBirthday(LocalDate dateOfBirth) {
+        LocalDate today = LocalDate.now();
+
+        LocalDate currentYearBirthday = today
+                .withMonth(dateOfBirth.getMonthValue())
+                .withDayOfMonth(dateOfBirth.getDayOfMonth());
+
+        if (currentYearBirthday.isAfter(today)) {
+            return DAYS.between(today, currentYearBirthday);
+        } else {
+            LocalDate nextYearBirthday = currentYearBirthday.plusYears(1);
+            return DAYS.between(today, nextYearBirthday);
+        }
+
     }
 }
