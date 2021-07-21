@@ -45,9 +45,9 @@ Execute the following command to run the application locally:
 
 Then test if it works with ``curl``:
 
-``curl -v --header "Content-Type: application/json" --request PUT --data '{"dateOfBirth":"2021-07-20"}' http://localhost:5000/hello/myuser``
+``curl -v --header "Content-Type: application/json" --request PUT --data '{"dateOfBirth":"2021-07-20"}' http://localhost:8080/hello/myuser``
 
-``curl -v --header "Content-Type: application/json" --request GET http://localhost:5000/hello/myuser``
+``curl -v --header "Content-Type: application/json" --request GET http://localhost:8080/hello/myuser``
 
 ### Deploying on AWS
 
