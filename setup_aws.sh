@@ -8,7 +8,6 @@ mvn liquibase:update -Ddatabase.endpoint.address=${endpoint}
 # Setup Elastic Beanstalk
 eb init helloworld --platform "Corretto 8 running on 64bit Amazon Linux 2" --region eu-central-1
 eb create green
-eb setenv DATABASE_ENDPOINT=${endpoint}
-eb setenv SERVER_PORT=5000
+eb setenv DATABASE_ENDPOINT=${endpoint} SERVER_PORT=5000
 eb clone green --clone_name blue
 eb status green | grep CNAME
