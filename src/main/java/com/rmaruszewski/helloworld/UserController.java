@@ -1,6 +1,8 @@
 package com.rmaruszewski.helloworld;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,8 +20,9 @@ import java.util.Optional;
 
 @RestController
 class UserController {
-    private static String FUTURE_BIRTHDAY_MESSAGE = "Hello, {0}! Your birthday is in {1} day(s)";
-    private static String TODAY_BIRTHDAY_MESSAGE = "Hello, {0}! Happy birthday!";
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final String FUTURE_BIRTHDAY_MESSAGE = "Hello, {0}! Your birthday is in {1} day(s)";
+    private static final String TODAY_BIRTHDAY_MESSAGE = "Hello, {0}! Happy birthday!";
     private static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final UserRepository userRepository;
     private final BirthdayDaysCalculator birthdayDaysCalculator;
@@ -59,6 +62,11 @@ class UserController {
 
     @GetMapping("/")
     ResponseEntity<String> performHealthCheck() {
+        logger.error("Just starting (error)");
+        logger.warn("Just starting (warn)");
+        logger.info("Just starting (info)");
+        logger.debug("Just starting (debug)");
+
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Cache-Control", "no-store");
         return ResponseEntity.ok().headers(responseHeaders).body("Hello, world!");
