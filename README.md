@@ -93,4 +93,4 @@ Note that after the script finishes you have to wait for about 60 seconds to let
 
 The diagram below shows the main architectural components after deploying the application on AWS using Elastic Beanstalk:
 
-![system diagram](aws/system_diagram.png "Title") 
+![system diagram](etc/aws/system_diagram.png "Title") 
