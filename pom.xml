@@ -14,6 +14,7 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <database.endpoint.address>localhost</database.endpoint.address>
+    <database.admin.username>postgres</database.admin.username>
   </properties>
 
   <dependencies>
@@ -126,8 +127,8 @@
           <changeLogFile>db/changelog.xml</changeLogFile>
           <url>jdbc:postgresql://${database.endpoint.address}/helloworld</url>
           <driver>org.postgresql.Driver</driver>
-          <username>postgres</username>
-          <password>postgres</password>
+          <username>${database.admin.username}</username>
+          <password>${env.POSTGRES_ADMIN_DB_PASSWORD}</password>
         </configuration>
         <dependencies>
           <dependency>
