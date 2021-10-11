@@ -13,8 +13,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <database.endpoint.address>localhost</database.endpoint.address>
-    <database.admin.username>postgres</database.admin.username>
+    <database.endpoint>localhost</database.endpoint>
+    <database.username>postgres</database.username>
+    <database.password>${env.POSTGRES_ADMIN_DB_PASSWORD}</database.password>
   </properties>
 
   <dependencies>
@@ -125,10 +126,11 @@
         <version>4.4.1</version>
         <configuration>
           <changeLogFile>db/changelog.xml</changeLogFile>
-          <url>jdbc:postgresql://${database.endpoint.address}/helloworld</url>
+          <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+          <url>jdbc:postgresql://${database.endpoint}/helloworld</url>
           <driver>org.postgresql.Driver</driver>
-          <username>${database.admin.username}</username>
-          <password>${env.POSTGRES_ADMIN_DB_PASSWORD}</password>
+          <username>${database.username}</username>
+          <password>${database.password}</password>
         </configuration>
         <dependencies>
           <dependency>
