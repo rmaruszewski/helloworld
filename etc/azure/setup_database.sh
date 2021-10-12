@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 resource_group="helloworld-rg"
 location="West Europe"
