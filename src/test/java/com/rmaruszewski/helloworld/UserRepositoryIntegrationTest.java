@@ -1,5 +1,6 @@
 package com.rmaruszewski.helloworld;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +18,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
+@PropertySource("classpath:application.properties")
 @ContextConfiguration(classes={
         DataSourceConfiguration.class,
         HelloWorldConfiguration.class})
-@PropertySource("classpath:application.properties")
 public class UserRepositoryIntegrationTest {
 
     @Autowired
     public UserRepository userRepository;
+
+    @BeforeClass
+    public static void initEnvironment() {
+        System.setProperty("database.type", "postgres");
+    }
 
     @Test
     @Sql("classpath:data-fixtures/sample_users.sql")
