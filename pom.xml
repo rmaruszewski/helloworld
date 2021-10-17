@@ -98,11 +98,13 @@
         <configuration>
           <failOnWarning>true</failOnWarning>
           <ignoredUnusedDeclaredDependencies>
-            <ignoredUnusedDeclaredDependency>org.springframework*</ignoredUnusedDeclaredDependency>
+            <dependency>org.springframework*</dependency>
+            <dependency>org.postgresql:postgresql:*</dependency>
+            <dependency>com.microsoft.sqlserver:mssql-jdbc:*</dependency>
           </ignoredUnusedDeclaredDependencies>
           <ignoredUsedUndeclaredDependencies>
-            <ignoredUsedUndeclaredDependency>org.springframework*</ignoredUsedUndeclaredDependency>
-            <ignoredUsedUndeclaredDependency>jakarta.*</ignoredUsedUndeclaredDependency>
+            <dependency>org.springframework*</dependency>
+            <dependency>jakarta.*</dependency>
           </ignoredUsedUndeclaredDependencies>
         </configuration>
         <executions>
